@@ -1,4 +1,4 @@
-module cursor-go-sdk
+module github.com/unkn0wncode/cursor-go-sdk
 
 go 1.24.6
 

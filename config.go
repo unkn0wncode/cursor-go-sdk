@@ -52,6 +52,6 @@ func (c *Config) applyDefaults() {
 		c.HTTPClient.Timeout = time.Duration(*c.TimeoutSeconds) * time.Second
 	}
 	if c.UserAgent == "" {
-		c.UserAgent = "cursor-go-sdk/0.1"
+		c.UserAgent = "cursor-go-sdk"
 	}
 }
