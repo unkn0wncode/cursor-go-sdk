@@ -171,6 +171,7 @@ func TestAgentsStatusEndpoints(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("ListAgents response: %s", spew.Sdump(agents))
 	require.NotNil(t, agents)
+	require.NotEmpty(t, agents.NextCursor)
 
 	if len(agents.Agents) > 0 {
 		require.NotEmpty(t, agents.Agents)
@@ -241,6 +242,7 @@ func TestAgentsRunFlowEndpoints(t *testing.T) {
 	require.NotNil(t, listed)
 	require.NotEmpty(t, listed.Agents)
 
+	// Conversation is not available immediately
 	time.Sleep(10 * time.Second)
 
 	conv, err := testClient.GetConversation(ctx, agent.ID)
