@@ -4,6 +4,15 @@ import (
 	"time"
 )
 
+// Possible values for Agent.Status.
+const (
+	AgentStatusRunning  = "RUNNING"
+	AgentStatusFinished = "FINISHED"
+	AgentStatusError    = "ERROR"
+	AgentStatusCreating = "CREATING"
+	AgentStatusExpired  = "EXPIRED"
+)
+
 // Agent represents a background agent task running in Cursor.
 type Agent struct {
 	ID        string    `json:"id"`
@@ -111,7 +120,7 @@ type Repository struct {
 
 // ListRepositoriesResponse is returned by GET /v0/repositories.
 type ListRepositoriesResponse struct {
-    Repositories []Repository `json:"repositories"`
+	Repositories []Repository `json:"repositories"`
 }
 
 // ListModelsResponse contains available model names.

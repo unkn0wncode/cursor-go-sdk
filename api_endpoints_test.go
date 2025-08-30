@@ -183,7 +183,7 @@ func TestAgentsStatusEndpoints(t *testing.T) {
 		require.Equal(t, agents.Agents[0].ID, agent.ID)
 		require.NotEmpty(t, agent.Status)
 
-		if agent.Status != "EXPIRED" {
+		if agent.Status != AgentStatusExpired {
 			// get conversation history
 			conversation, err := testClient.GetConversation(ctx, agents.Agents[0].ID)
 			require.NoError(t, err)
