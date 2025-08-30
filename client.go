@@ -102,7 +102,19 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		b, _ := io.ReadAll(resp.Body)
-		return &APIError{StatusCode: resp.StatusCode, Body: string(b)}
+		var parsed struct {
+			Error struct {
+				Message string `json:"message"`
+				Code    string `json:"code"`
+			} `json:"error"`
+		}
+		_ = json.Unmarshal(b, &parsed)
+		return &APIError{
+			StatusCode: resp.StatusCode,
+			Message:    parsed.Error.Message,
+			Code:       parsed.Error.Code,
+			Body:       string(b),
+		}
 	}
 
 	if out == nil {

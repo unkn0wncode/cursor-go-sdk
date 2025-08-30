@@ -109,9 +109,9 @@ type Repository struct {
 	Repository string `json:"repository"`
 }
 
-// ListRepositoriesResponse is returned by GET /v0/integrations/github/repositories.
+// ListRepositoriesResponse is returned by GET /v0/repositories.
 type ListRepositoriesResponse struct {
-	Repositories []Repository `json:"repositories"`
+    Repositories []Repository `json:"repositories"`
 }
 
 // ListModelsResponse contains available model names.

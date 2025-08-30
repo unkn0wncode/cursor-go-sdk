@@ -24,9 +24,9 @@ func VerifySignature(secret string, body []byte, signatureHeader string) bool {
 	return subtle.ConstantTimeCompare([]byte(expected), []byte(computed)) == 1
 }
 
-// Middleware returns an http.Handler that verifies webhook signatures.
+// SignatureHandleWrapper returns an http.Handler that verifies webhook signatures.
 // If verification fails, it responds with 401. On success, it calls next.
-func Middleware(secret string, next http.Handler) http.Handler {
+func SignatureHandleWrapper(secret string, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Read the raw body
 		body, err := io.ReadAll(r.Body)
