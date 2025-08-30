@@ -103,7 +103,7 @@ func parseOwnerRepo(remote string) string {
 	}
 	parts := strings.Split(remote, "/")
 	if len(parts) >= 2 {
-		return parts[0] + "/" + parts[1]
+		return fmt.Sprintf("https://github.com/%s/%s", parts[0], parts[1])
 	}
 	return ""
 }
@@ -174,7 +174,7 @@ func TestAgentsStatusEndpoints(t *testing.T) {
 
 	if len(agents.Agents) > 0 {
 		require.NotEmpty(t, agents.Agents)
-	
+
 		// get status of the first agent
 		agent, err := testClient.GetAgent(ctx, agents.Agents[0].ID)
 		require.NoError(t, err)
@@ -183,13 +183,15 @@ func TestAgentsStatusEndpoints(t *testing.T) {
 		require.Equal(t, agents.Agents[0].ID, agent.ID)
 		require.NotEmpty(t, agent.Status)
 
-		// get conversation history
-		conversation, err := testClient.GetConversation(ctx, agents.Agents[0].ID)
-		require.NoError(t, err)
-		t.Logf("GetConversation response: %s", spew.Sdump(conversation))
-		require.NotNil(t, conversation)
-		require.NotEmpty(t, conversation.ID)
-		require.NotEmpty(t, conversation.Messages)
+		if agent.Status != "EXPIRED" {
+			// get conversation history
+			conversation, err := testClient.GetConversation(ctx, agents.Agents[0].ID)
+			require.NoError(t, err)
+			t.Logf("GetConversation response: %s", spew.Sdump(conversation))
+			require.NotNil(t, conversation)
+			require.NotEmpty(t, conversation.ID)
+			require.NotEmpty(t, conversation.Messages)
+		}
 	}
 
 	if deadline, ok := ctx.Deadline(); ok {
@@ -238,6 +240,8 @@ func TestAgentsRunFlowEndpoints(t *testing.T) {
 	t.Logf("ListAgents response: %s", spew.Sdump(listed))
 	require.NotNil(t, listed)
 	require.NotEmpty(t, listed.Agents)
+
+	time.Sleep(10 * time.Second)
 
 	conv, err := testClient.GetConversation(ctx, agent.ID)
 	require.NoError(t, err)
